@@ -12,6 +12,7 @@ import {errorHandler} from "./middlewares/errorHandler";
 import rootRouter from "./routes/routes";
 dotenv.config({ path: ".env" });
 
+
 const port: string | number = process.env.PORT ?? 1119;
 const app = express();
 
