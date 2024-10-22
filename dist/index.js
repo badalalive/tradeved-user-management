@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
-require("./utils/singletonRegistory");
+require("./utils/SingletonRegistory");
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));

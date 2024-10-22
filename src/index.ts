@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import "./utils/singletonRegistory";
+import "./utils/SingletonRegistory";
 
 import express from "express";
 import cors from "cors";
