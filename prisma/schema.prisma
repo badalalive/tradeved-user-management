@@ -1,0 +1,50 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  String              @id @unique @default(cuid())
+  email               String              @unique
+  password            String?
+  name                String?
+  created_at          DateTime            @default(now())
+  updated_at          DateTime            @updatedAt
+  created_by          String
+  updated_by          String
+  registration_status UserRegisterStatus? @default(PENDING) // Use enum here
+  userRole            UserRole[]
+}
+
+model Role {
+  id       String     @id @unique @default(cuid())
+  title    String
+  UserRole UserRole[]
+}
+
+// Join table to create a many-to-many relationship
+model UserRole {
+  id     String @id @unique @default(cuid())
+  userId String
+  roleId String
+
+  user User @relation(fields: [userId], references: [id])
+  role Role @relation(fields: [roleId], references: [id])
+}
+
+// Enum for user registration status
+enum UserRegisterStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+}
