@@ -6,6 +6,8 @@ var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.decryptData = decryptData;
 const crypto_1 = __importDefault(require("crypto"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config({ path: ".env" });
 const privateKey = {
     key: ((_a = process.env.RSA_PRIVATE_KEY) === null || _a === void 0 ? void 0 : _a.replace(/\\n/g, '\n')) || '',
     passphrase: process.env.RSA_PASSPHRASE || ''

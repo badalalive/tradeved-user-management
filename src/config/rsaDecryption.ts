@@ -1,4 +1,6 @@
 import crypto from 'crypto';
+import dotenv from "dotenv";
+dotenv.config({ path: ".env" });
 
 const privateKey = {
     key: process.env.RSA_PRIVATE_KEY?.replace(/\\n/g, '\n') || '',
