@@ -46,7 +46,6 @@ let AuthService = class AuthService {
         });
         this.spaceCreatorSignup = (data) => __awaiter(this, void 0, void 0, function* () {
             const signUpBody = JSON.parse((0, rsaDecryption_1.decryptData)(data));
-            console.log("signUpBody", signUpBody);
             const role = yield this.authRepository.getRoleByTitle(userRole_1.UserRole.SPACE_CREATOR);
             if (!role) {
                 throw new httpException_1.HttpException(500, "Something went wrong");
@@ -57,6 +56,24 @@ let AuthService = class AuthService {
                 statusCode: 201,
                 message: "Space Creator Register"
             };
+        });
+        this.checkEmailExist = (data) => __awaiter(this, void 0, void 0, function* () {
+            const email = (0, rsaDecryption_1.decryptData)(data);
+            const user = yield this.authRepository.findByEmail(email);
+            if (user) {
+                return {
+                    data: true,
+                    statusCode: 200,
+                    message: "Found"
+                };
+            }
+            else {
+                return {
+                    data: false,
+                    statusCode: 404,
+                    message: "Not Found"
+                };
+            }
         });
     }
 };

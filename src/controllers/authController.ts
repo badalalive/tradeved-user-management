@@ -32,6 +32,18 @@ export class AuthController {
             next(error)
         }
     }
+    checkEmail = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+        try {
+            const dataObject: string = req.body.data;
+            if (!dataObject) {
+                new HttpException(400, "data should be given");
+            }
+            const {data, statusCode, message} = await this.authService.checkEmailExist(dataObject);
+            res.status(statusCode).send({data, message});
+        } catch(error: any) {
+            next(error)
+        }
+    }
 
     spaceCreatorSignup = async (req: Request, res: Response, next: NextFunction) => {
         try {

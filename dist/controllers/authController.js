@@ -47,6 +47,19 @@ let AuthController = class AuthController {
                 next(error);
             }
         });
+        this.checkEmail = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const dataObject = req.body.data;
+                if (!dataObject) {
+                    new httpException_1.HttpException(400, "data should be given");
+                }
+                const { data, statusCode, message } = yield this.authService.checkEmailExist(dataObject);
+                res.status(statusCode).send({ data, message });
+            }
+            catch (error) {
+                next(error);
+            }
+        });
         this.spaceCreatorSignup = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const dataObject = req.body.data;

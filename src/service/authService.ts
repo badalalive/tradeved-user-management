@@ -32,7 +32,6 @@ export class AuthService {
 
     spaceCreatorSignup = async (data: string) => {
         const signUpBody = JSON.parse(decryptData(data));
-        console.log("signUpBody", signUpBody)
         const role = await this.authRepository.getRoleByTitle(UserRole.SPACE_CREATOR);
         if(!role) {
             throw new HttpException(500, "Something went wrong")
@@ -49,6 +48,24 @@ export class AuthService {
             data: user,
             statusCode: 201,
             message: "Space Creator Register"
+        }
+    }
+
+    checkEmailExist = async (data: string) => {
+        const email = decryptData(data);
+        const user = await this.authRepository.findByEmail(email);
+        if(user) {
+            return {
+                data: true,
+                statusCode: 200,
+                message: "Found"
+            }
+        } else {
+            return {
+                data: false,
+                statusCode: 404,
+                message: "Not Found"
+            }
         }
     }
 }
