@@ -6,6 +6,8 @@ import {HttpException} from "../exceptions/httpException";
 import bcrypt from "bcrypt";
 import {UserRegisterStatus} from "@prisma/client";
 import {generateToken, verifyPassword} from "../utils/utilities";
+import {UserRole} from "../utils/userRole";
+import {decryptData} from "../config/rsaDecryption";
 
 @injectable()
 export class AuthService {
@@ -26,5 +28,27 @@ export class AuthService {
         user.password = null;
         return { data: generateToken(user.id), message: "login Successfully", statusCode: 200}
 
+    }
+
+    spaceCreatorSignup = async (data: string) => {
+        const signUpBody = JSON.parse(decryptData(data));
+        console.log("signUpBody", signUpBody)
+        const role = await this.authRepository.getRoleByTitle(UserRole.SPACE_CREATOR);
+        if(!role) {
+            throw new HttpException(500, "Something went wrong")
+        }
+        const user = await this.authRepository.signUp(
+            signUpBody.email,
+            signUpBody.password,
+            "",
+            UserRegisterStatus.ACTIVE,
+            "",
+            role.id
+        )
+        return {
+            data: user,
+            statusCode: 201,
+            message: "Space Creator Register"
+        }
     }
 }

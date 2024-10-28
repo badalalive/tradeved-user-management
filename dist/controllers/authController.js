@@ -24,6 +24,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const tsyringe_1 = require("tsyringe");
 const authService_1 = require("../service/authService");
+const httpException_1 = require("../exceptions/httpException");
 let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
@@ -41,6 +42,19 @@ let AuthController = class AuthController {
             try {
                 const user = req.user;
                 res.status(200).send({ data: user, message: "user fetch successfully" });
+            }
+            catch (error) {
+                next(error);
+            }
+        });
+        this.spaceCreatorSignup = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const dataObject = req.body.data;
+                if (!dataObject) {
+                    new httpException_1.HttpException(400, "data should be given");
+                }
+                const { data, statusCode, message } = yield this.authService.spaceCreatorSignup(dataObject);
+                res.status(statusCode).send({ data, message });
             }
             catch (error) {
                 next(error);

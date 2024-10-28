@@ -46,6 +46,50 @@ let AuthRepository = class AuthRepository {
             return user;
         });
     }
+    signUp(email, password, name, registration_status, created_by, roleId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.prismaClient.$connect();
+            const user = yield this.prismaClient.user.create({
+                data: {
+                    name,
+                    email,
+                    password,
+                    registration_status,
+                    created_by: created_by,
+                    updated_by: created_by,
+                    userRole: {
+                        create: {
+                            roleId: roleId,
+                        }
+                    }
+                }, include: {
+                    userRole: {
+                        include: {
+                            role: {
+                                select: {
+                                    title: true
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            yield this.prismaClient.$disconnect();
+            return user;
+        });
+    }
+    getRoleByTitle(title) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.prismaClient.$connect();
+            const role = yield this.prismaClient.role.findUnique({
+                where: {
+                    title
+                }
+            });
+            yield this.prismaClient.$disconnect();
+            return role;
+        });
+    }
 };
 exports.AuthRepository = AuthRepository;
 exports.AuthRepository = AuthRepository = __decorate([

@@ -27,6 +27,8 @@ const authRepository_1 = require("../repository/authRepository");
 const httpException_1 = require("../exceptions/httpException");
 const client_1 = require("@prisma/client");
 const utilities_1 = require("../utils/utilities");
+const userRole_1 = require("../utils/userRole");
+const rsaDecryption_1 = require("../config/rsaDecryption");
 let AuthService = class AuthService {
     constructor(authRepository) {
         this.authRepository = authRepository;
@@ -41,6 +43,20 @@ let AuthService = class AuthService {
             // delete password
             user.password = null;
             return { data: (0, utilities_1.generateToken)(user.id), message: "login Successfully", statusCode: 200 };
+        });
+        this.spaceCreatorSignup = (data) => __awaiter(this, void 0, void 0, function* () {
+            const signUpBody = JSON.parse((0, rsaDecryption_1.decryptData)(data));
+            console.log("signUpBody", signUpBody);
+            const role = yield this.authRepository.getRoleByTitle(userRole_1.UserRole.SPACE_CREATOR);
+            if (!role) {
+                throw new httpException_1.HttpException(500, "Something went wrong");
+            }
+            const user = yield this.authRepository.signUp(signUpBody.email, signUpBody.password, "", client_1.UserRegisterStatus.ACTIVE, "", role.id);
+            return {
+                data: user,
+                statusCode: 201,
+                message: "Space Creator Register"
+            };
         });
     }
 };

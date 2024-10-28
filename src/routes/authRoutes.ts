@@ -104,5 +104,6 @@ authRoutes.post("/login", authController.login)
  *         description: Wrong authentication token
  */
 authRoutes.get("/get-user", authMiddleWare, authController.getUser)
+authRoutes.post("/signup/space-creator", authController.spaceCreatorSignup)
 
 export default authRoutes
