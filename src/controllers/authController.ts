@@ -27,6 +27,7 @@ export class AuthController {
     getUser = async (req: RequestWithUser, res: Response, next: NextFunction) => {
         try {
             const user = req.user;
+            delete user.password;
             res.status(200).send({data: user, message: "user fetch successfully"});
         } catch(error: any) {
             next(error)

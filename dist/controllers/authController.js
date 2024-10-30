@@ -41,6 +41,7 @@ let AuthController = class AuthController {
         this.getUser = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const user = req.user;
+                delete user.password;
                 res.status(200).send({ data: user, message: "user fetch successfully" });
             }
             catch (error) {
